@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7ecaa01f-426e-4a21-81eb-9ae6cd424383" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_static/cil_survey_approaches.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_static/facil_logo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_static/facil_logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_static/tb1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_static/tb2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/script_cifar100.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/bic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/dmc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/eeil.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/ewc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/finetuning.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/freezing.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/icarl.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/il2m.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/incremental_learning.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/joint.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/lucir.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/lwf.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/lwm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/mas.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/path_integral.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/approach/r_walk.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/datasets/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/datasets/base_dataset.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/datasets/data_loader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/datasets/dataset_config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/datasets/exemplars_dataset.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/datasets/exemplars_selection.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/datasets/memory_dataset.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gridsearch.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gridsearch_config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/last_layer_analysis.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loggers/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loggers/disk_logger.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loggers/exp_logger.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loggers/tensorboard_logger.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main_incremental.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/networks/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/networks/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/networks/lenet.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/networks/network.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/networks/resnet32.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/networks/vggnet.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_bic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_dataloader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_datasets_transforms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_dmc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_eeil.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_ewc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_finetuning.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_fix_bn.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_freezing.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_gridsearch.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_icarl.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_il2m.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_joint.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_last_layer_analysis.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_loggers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_lucir.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_lwf.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_lwm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_mas.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_multisoftmax.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_path_integral.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_rwalk.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_stop_at_task.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test_warmup.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2ARQwIQummslmZVLRXte9BY96fU" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7ecaa01f-426e-4a21-81eb-9ae6cd424383" name="Changes" comment="" />
+      <created>1654970154653</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1654970154653</updated>
+      <workItem from="1654970156873" duration="961000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
