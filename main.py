@@ -1,10 +1,7 @@
-import os
 import time
-import torch
-import utils
 
 from adversarial_examples import AdversarialExamplesBaseClass
-from configuration import *
+from utils import *
 from settings import *
 
 
@@ -16,7 +13,7 @@ else:
     print('WARNING: [CUDA unavailable] Using CPU instead!')
     device = 'cpu'
 
-utils.seed_everything(seed=41)
+seed_everything(seed=41)
 
 if __name__ == '__main__':
     for method_name, method_paramethers in methods.items():
@@ -33,7 +30,8 @@ if __name__ == '__main__':
         acc_taw, acc_tag, forg_taw, forg_tag = prepare_results_numpy(max_task)
         logger.print_appr_args(approach_kwargs)
         for t in range(len(adversarial_examples.attacks)):
-            number_of_classes = t + 10
+            number_of_classes = t + base_classes_number
+
             if t >= max_task:
                 continue
 
@@ -70,9 +68,11 @@ if __name__ == '__main__':
             print('Save at ' + os.path.join(RESULT_PATH, full_exp_name))
             logger.print_final_results(acc_taw, acc_tag, forg_taw, forg_tag, net, t, taskcla, max_task)
 
+            # Last layer analysis
             if LAST_LAYER_ANALYSIS:
+                print([net, t, taskcla])
                 logger.print_last_layer_result(net, t, taskcla)
         # Print Summary
-        utils.print_summary(acc_taw, acc_tag, forg_taw, forg_tag)
+        print_summary(acc_taw, acc_tag, forg_taw, forg_tag)
         print('[Elapsed time = {:.1f} h]'.format((time.time() - tstart) / (60 * 60)))
         print('Done!')

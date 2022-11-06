@@ -1,6 +1,8 @@
 import torch
-from torch import nn
+import torch.nn as nn
 from copy import deepcopy
+
+__all__ = ['resnet32']
 
 class LLL_Net(nn.Module):
     """Basic class for implementing networks"""
@@ -92,10 +94,6 @@ class LLL_Net(nn.Module):
     def _initialize_weights(self):
         """Initialize weights using different strategies"""
         pass
-
-import torch.nn as nn
-
-__all__ = ['resnet32']
 
 
 def conv3x3(in_planes, out_planes, stride=1):
