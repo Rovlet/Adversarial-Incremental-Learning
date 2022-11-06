@@ -342,7 +342,7 @@ base_settings = {
         'x_test': 'X_test_ustc.npy',
         'y_train': 'y_train_ustc.npy',
         'y_test': 'y_train_ustc.npy',
-        'taskcla' : [(0, 10), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1)]
+        'taskcla': [(0, 10), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1)]
     },
     "cicids": {
         'number_of_classes': 9,
@@ -350,7 +350,7 @@ base_settings = {
         'x_test': 'X_test_cicids.npy',
         'y_train': 'y_train_cicids.npy',
         'y_test': 'y_test_cicids.npy',
-        'taskcla' : [(0, 9), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1)]
+        'taskcla': [(0, 9), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1)]
     }
 }
 config = base_settings[DATABASE]

@@ -4,14 +4,12 @@ from data_loader import get_loaders
 from loggers.exp_logger import MultiLogger
 from loggers.logger import Logger
 from settings import *
+import os
+import torch
+import random
+import numpy as np
 
-
-def prepare_results_numpy(max_task):
-    acc_taw = np.zeros((max_task, max_task))
-    acc_tag = np.zeros((max_task, max_task))
-    forg_taw = np.zeros((max_task, max_task))
-    forg_tag = np.zeros((max_task, max_task))
-    return acc_taw, acc_tag, forg_taw, forg_tag
+cudnn_deterministic = True
 
 
 def get_method_kwargs(method_paramethers, method_name):
@@ -42,11 +40,10 @@ def get_data_loaders(method_paramethers):
                                               num_workers=method_paramethers['NUM_WORKERS'],
                                               pin_memory=method_paramethers['PIN_MEMORY'])
     tst_loader.append(tst)
-    taskcla = config['taskcla']
-    return trn_loader, val_loader, tst_loader, taskcla
+    return trn_loader, val_loader, tst_loader
 
 
-def get_approach(method_name, trn_loader, base_kwargs, logger, appr_exemplars_dataset_args, net, device):
+def get_incremental_learning_class(method_name, trn_loader, base_kwargs, logger, appr_exemplars_dataset_args, net, device):
     Approach = getattr(importlib.import_module(name='approach.' + method_name), 'Appr')
     Appr_ExemplarsDataset = Approach.exemplars_dataset_class()
     first_train_ds = trn_loader.dataset
@@ -62,12 +59,21 @@ def get_logger(full_exp_name):
     return Logger(MultiLogger(RESULT_PATH, full_exp_name, loggers=LOG, save_models=SAVE_MODELS))
 
 
-import os
-import torch
-import random
-import numpy as np
-
-cudnn_deterministic = True
+def get_test_metrics(results, current_task_number, tst_loader, approach, logger):
+    all_predicted = []
+    all_true = []
+    for task in range(current_task_number + 1):
+        test_loss, results.acc_taw[current_task_number, task], results.acc_tag[current_task_number, task], predicted, true = approach.eval(task, tst_loader[task])
+        all_predicted += predicted
+        all_true += true
+        if task < current_task_number:
+            results.forg_taw[current_task_number, task] = results.acc_taw[:current_task_number, task].max(0) - \
+                                                          results.acc_taw[current_task_number, task]
+            results.forg_tag[current_task_number, task] = results.acc_tag[:current_task_number, task].max(0) - \
+                                                          results.acc_tag[current_task_number, task]
+        logger.print_task_results(results.acc_taw, results.acc_tag, current_task_number, task, test_loss,
+                                          results.forg_taw, results.forg_tag)
+    return all_predicted, all_true
 
 
 def seed_everything(seed=0):
@@ -79,20 +85,3 @@ def seed_everything(seed=0):
     os.environ['PYTHONHASHSEED'] = str(seed)
     torch.backends.cudnn.deterministic = cudnn_deterministic
 
-
-def print_summary(acc_taw, acc_tag, forg_taw, forg_tag):
-    """Print summary of results"""
-    for name, metric in zip(['TAw Acc', 'TAg Acc', 'TAw Forg', 'TAg Forg'], [acc_taw, acc_tag, forg_taw, forg_tag]):
-        print('*' * 108)
-        print(name)
-        for i in range(metric.shape[0]):
-            print('\t', end='')
-            for j in range(metric.shape[1]):
-                print('{:5.1f}% '.format(100 * metric[i, j]), end='')
-            if np.trace(metric) == 0.0:
-                if i > 0:
-                    print('\tAvg.:{:5.1f}% '.format(100 * metric[i, :i].mean()), end='')
-            else:
-                print('\tAvg.:{:5.1f}% '.format(100 * metric[i, :i + 1].mean()), end='')
-            print()
-    print('*' * 108)

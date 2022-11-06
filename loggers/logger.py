@@ -3,6 +3,8 @@ from last_layer_analysis import last_layer_analysis
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import itertools
+from utils import get_test_metrics
+from settings import LAST_LAYER_ANALYSIS
 
 
 class Logger:
@@ -55,7 +57,7 @@ class Logger:
         self.logger.log_scalar(task=t, iter=u, name='forg_taw', group='test', value=100 * forg_taw[t, u])
         self.logger.log_scalar(task=t, iter=u, name='forg_tag', group='test', value=100 * forg_tag[t, u])
 
-    def print_final_results(self, acc_taw, acc_tag, forg_taw, forg_tag, net, t, taskcla, max_task):
+    def log_results(self, acc_taw, acc_tag, forg_taw, forg_tag, net, t, taskcla, max_task):
         self.logger.log_result(acc_taw, name="acc_taw", step=t)
         self.logger.log_result(acc_tag, name="acc_tag", step=t)
         self.logger.log_result(forg_taw, name="forg_taw", step=t)
@@ -77,9 +79,36 @@ class Logger:
         self.logger.log_figure(name='weights', iter=t, figure=weights)
         self.logger.log_figure(name='bias', iter=t, figure=biases)
 
-
-    def print_appr_args(self, approach_kwargs):
+    @staticmethod
+    def print_appr_args(approach_kwargs):
         print('Approach arguments =')
         for arg in approach_kwargs.keys():
             print('\t' + arg + ':', approach_kwargs[arg])
         print('=' * 108)
+
+    @staticmethod
+    def print_summary(acc_taw, acc_tag, forg_taw, forg_tag):
+        """Print summary of results"""
+        for name, metric in zip(['TAw Acc', 'TAg Acc', 'TAw Forg', 'TAg Forg'], [acc_taw, acc_tag, forg_taw, forg_tag]):
+            print('*' * 108)
+            print(name)
+            for i in range(metric.shape[0]):
+                print('\t', end='')
+                for j in range(metric.shape[1]):
+                    print('{:5.1f}% '.format(100 * metric[i, j]), end='')
+                if np.trace(metric) == 0.0:
+                    if i > 0:
+                        print('\tAvg.:{:5.1f}% '.format(100 * metric[i, :i].mean()), end='')
+                else:
+                    print('\tAvg.:{:5.1f}% '.format(100 * metric[i, :i + 1].mean()), end='')
+                print()
+        print('*' * 108)
+
+    @staticmethod
+    def save_results(results, current_task_number, tst_loader, approach, logger, net):
+        all_predicted, all_true = get_test_metrics(results, current_task_number, tst_loader, approach)
+        logger.save_conf_matrix(all_predicted, all_true, current_task_number)
+        logger.save_results(results.acc_taw, results.acc_tag, results.forg_taw, results.forg_tag, net, current_task_number,
+                            results.taskcla, results.max_task)
+        if LAST_LAYER_ANALYSIS:
+            logger.print_last_layer_result(net, current_task_number, results.taskcla)

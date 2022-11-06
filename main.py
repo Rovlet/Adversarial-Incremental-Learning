@@ -1,9 +1,6 @@
-import time
-
 from adversarial_examples import AdversarialExamplesBaseClass
 from utils import *
 from settings import *
-
 
 if torch.cuda.is_available():
     torch.cuda.set_device(GPU)
@@ -15,64 +12,63 @@ else:
 
 seed_everything(seed=41)
 
-if __name__ == '__main__':
-    for method_name, method_paramethers in methods.items():
-        tstart = time.time()
-        full_exp_name = f'{DATABASE}_{method_name}'
-        base_kwargs, approach_kwargs, appr_exemplars_dataset_args = get_method_kwargs(method_paramethers, method_name)
+
+class Config:
+    def __init__(self, method_name, method_parameters):
+        self.method_name = method_name
+        self.full_name = f'{DATABASE}_{self.method_name}'
+        self.method_parameters = method_parameters
+
+        self.base_kwargs, self.approach_kwargs, self.appr_exemplars_dataset_args = get_method_kwargs(
+            self.method_parameters,
+            self.method_name)
+        self.taskcla = config['taskcla']
+        self.max_task = len(self.taskcla)
+
+
+class ResultsStorage:
+    def __init__(self):
+        self.taskcla = config['taskcla']
+        max_task = len(self.taskcla)
+        self.acc_taw = np.zeros((max_task, max_task))
+        self.acc_tag = np.zeros((max_task, max_task))
+        self.forg_taw = np.zeros((max_task, max_task))
+        self.forg_tag = np.zeros((max_task, max_task))
+
+
+def run():
+    for method_name, method_parameters in methods.items():
+        config = Config(method_name, method_parameters)
+        results = ResultsStorage()
+
+        logger = get_logger(config.full_name)
+        logger.print_appr_args(config.approach_kwargs)
+
         adversarial_examples = AdversarialExamplesBaseClass()
-        net = get_model(method_paramethers)
-        logger = get_logger(full_exp_name)
-        trn_loader, val_loader, tst_loader, taskcla = get_data_loaders(method_paramethers)
-        approach = get_approach(method_name, trn_loader, base_kwargs, logger, appr_exemplars_dataset_args, net, device)
 
-        max_task = len(taskcla)
-        acc_taw, acc_tag, forg_taw, forg_tag = prepare_results_numpy(max_task)
-        logger.print_appr_args(approach_kwargs)
-        for t in range(len(adversarial_examples.attacks)):
-            number_of_classes = t + base_classes_number
+        net = get_model(method_parameters)
 
-            if t >= max_task:
-                continue
+        trn_loader, val_loader, tst_loader = get_data_loaders(config.method_parameters)
+        incremental_learning_method = get_incremental_learning_class(config.method_name, trn_loader, config.base_kwargs,
+                                                                     logger, config.appr_exemplars_dataset_args, net,
+                                                                     device)
 
-            if t > 0:
-                print("adverserial examples creation")
-                trn_loader, val_loader, tst_loader = adversarial_examples.get_loaders_with_adv_examples(net, tst_loader, t)
-                number_of_classes = 1
-
-            print('*' * 108)
-            print('Task {:2d}'.format(t))
-            print('*' * 108)
+        number_of_classes_in_this_task = base_classes_number
+        for task in range(len(adversarial_examples.attacks)):
+            if task > 0:
+                trn_loader, val_loader, tst_loader = adversarial_examples.get_loaders_with_adv_examples(
+                    net, tst_loader, task)
+                number_of_classes_in_this_task = 1
 
             # Add head for current task
-            net.add_head(number_of_classes)
+            net.add_head(number_of_classes_in_this_task)
             net.to(device)
 
-            # Train
-            approach.train(t, trn_loader, val_loader)
-            print('-' * 108)
+            incremental_learning_method.train(task, trn_loader, val_loader)
+            logger.save_results(results, task, tst_loader, incremental_learning_method, logger, net)
 
-            # Test
-            predicted = []
-            true = []
-            for u in range(t + 1):
-                test_loss, acc_taw[t, u], acc_tag[t, u], p, tar = approach.eval(u, tst_loader[u])
-                predicted += p
-                true += tar
-                if u < t:
-                    forg_taw[t, u] = acc_taw[:t, u].max(0) - acc_taw[t, u]
-                    forg_tag[t, u] = acc_tag[:t, u].max(0) - acc_tag[t, u]
-                logger.print_task_results(acc_taw, acc_tag, t, u, test_loss, forg_taw, forg_tag)
-            logger.save_conf_matrix(predicted, true, t)
+        logger.print_summary(results.acc_taw, results.acc_tag, results.forg_taw, results.forg_tag)
 
-            print('Save at ' + os.path.join(RESULT_PATH, full_exp_name))
-            logger.print_final_results(acc_taw, acc_tag, forg_taw, forg_tag, net, t, taskcla, max_task)
 
-            # Last layer analysis
-            if LAST_LAYER_ANALYSIS:
-                print([net, t, taskcla])
-                logger.print_last_layer_result(net, t, taskcla)
-        # Print Summary
-        print_summary(acc_taw, acc_tag, forg_taw, forg_tag)
-        print('[Elapsed time = {:.1f} h]'.format((time.time() - tstart) / (60 * 60)))
-        print('Done!')
+if __name__ == '__main__':
+    run()

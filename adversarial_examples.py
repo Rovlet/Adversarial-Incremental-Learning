@@ -4,7 +4,6 @@ from sklearn.utils import shuffle
 import numpy as np
 import foolbox.attacks as fa
 import torch
-from settings import MAX_ADV_PER_EPSILON
 from data_loader import read_train_data, get_adv_loaders, get_transform
 from PIL import Image
 
@@ -40,7 +39,8 @@ class AdversarialExamplesBaseClass:
         number_of_examples_per_iteration = 1000
         iterations = int(number_of_adversarial_examples_pr_attack/number_of_examples_per_iteration)
         for i in range(iterations):
-            raw_advs, clipped_advs, success = attack(fmodel, images[i*number_of_examples_per_iteration:(i+1)*number_of_examples_per_iteration], labels[i*number_of_examples_per_iteration:(i+1)*number_of_examples_per_iteration], epsilons=EPSILONS)
+            raw_advs, clipped_advs, success = attack(fmodel, images[i*number_of_examples_per_iteration:(i+1)*number_of_examples_per_iteration],
+                                                     labels[i*number_of_examples_per_iteration:(i+1)*number_of_examples_per_iteration], epsilons=EPSILONS)
 
             for adv in clipped_advs:
                 adv = adv.cpu().numpy()
@@ -63,7 +63,8 @@ class AdversarialExamplesBaseClass:
                                                                                tst_transform=tst_transform)
         # shuffle
         images, labels = shuffle(images, labels)
-        raw_advs, labels = self.prepare_adv_dataset(net.model, images[:2000], labels[:2000], t)
+        raw_advs, labels = self.prepare_adv_dataset(net.model, images[:number_of_adversarial_examples_pr_attack],
+                                                    labels[:number_of_adversarial_examples_pr_attack], t)
         trn_loader, val_loader, tst = get_adv_loaders(raw_advs, labels, t)
         tst_loader.append(tst)
         return trn_loader, val_loader, tst_loader
