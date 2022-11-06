@@ -1,7 +1,10 @@
+# Adversarial Incremental Learning
+This code was written using python 3.7 
+
 ## Installation (Windows)
 
 ```bash
-python virtualenv adversarial-env
+virtualenv adversarial-env
 adversarial-env/Scripts/activate
 pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
 pip install -r requirements.txt
