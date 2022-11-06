@@ -103,13 +103,13 @@ class Logger:
                 print()
         print('*' * 108)
 
-    def save_results(self, results, current_task_number, tst_loader, approach, logger, net):
+    def save_results(self, results, current_task_number, tst_loader, approach, net, max_task):
         all_predicted, all_true = self.get_test_metrics(results, current_task_number, tst_loader, approach)
-        logger.save_conf_matrix(all_predicted, all_true, current_task_number)
-        logger.save_results(results.acc_taw, results.acc_tag, results.forg_taw, results.forg_tag, net, current_task_number,
-                            results.taskcla, results.max_task)
+        self.save_conf_matrix(all_predicted, all_true, current_task_number)
+        self.log_results(results.acc_taw, results.acc_tag, results.forg_taw, results.forg_tag, net, current_task_number,
+                            results.taskcla, max_task)
         if LAST_LAYER_ANALYSIS:
-            logger.print_last_layer_result(net, current_task_number, results.taskcla)
+            self.print_last_layer_result(net, current_task_number, results.taskcla)
 
     def get_test_metrics(self, results, current_task_number, tst_loader, approach):
         all_predicted = []
@@ -124,7 +124,7 @@ class Logger:
                                                               results.acc_taw[current_task_number, task]
                 results.forg_tag[current_task_number, task] = results.acc_tag[:current_task_number, task].max(0) - \
                                                               results.acc_tag[current_task_number, task]
-            self.logger.print_task_results(results.acc_taw, results.acc_tag, current_task_number, task, test_loss,
+            self.print_task_results(results.acc_taw, results.acc_tag, current_task_number, task, test_loss,
                                       results.forg_taw, results.forg_tag)
 
         return all_predicted, all_true

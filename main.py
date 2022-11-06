@@ -65,7 +65,7 @@ def run():
             net.to(device)
 
             incremental_learning_method.train(task, trn_loader, val_loader)
-            logger.save_results(results, task, tst_loader, incremental_learning_method, logger, net)
+            logger.save_results(results, task, tst_loader, incremental_learning_method, net, config.max_task)
 
         logger.print_summary(results.acc_taw, results.acc_tag, results.forg_taw, results.forg_tag)
 
