@@ -104,7 +104,7 @@ class Logger:
         print('*' * 108)
 
     def save_results(self, results, current_task_number, tst_loader, approach, logger, net):
-        all_predicted, all_true = self.get_test_metrics(results, current_task_number, tst_loader, approach, logger)
+        all_predicted, all_true = self.get_test_metrics(results, current_task_number, tst_loader, approach)
         logger.save_conf_matrix(all_predicted, all_true, current_task_number)
         logger.save_results(results.acc_taw, results.acc_tag, results.forg_taw, results.forg_tag, net, current_task_number,
                             results.taskcla, results.max_task)
