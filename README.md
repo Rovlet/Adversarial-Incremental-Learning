@@ -1,3 +1,12 @@
+## Installation (Windows)
+
+```bash
+python virtualenv adversarial-env
+adversarial-env/Scripts/activate
+pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+pip install -r requirements.txt
+```
+
 ## How to use 
 To run this project, you need to add your data in the ./data directory like this:
 
