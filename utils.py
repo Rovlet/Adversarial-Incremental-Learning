@@ -59,21 +59,7 @@ def get_logger(full_exp_name):
     return Logger(MultiLogger(RESULT_PATH, full_exp_name, loggers=LOG, save_models=SAVE_MODELS))
 
 
-def get_test_metrics(results, current_task_number, tst_loader, approach, logger):
-    all_predicted = []
-    all_true = []
-    for task in range(current_task_number + 1):
-        test_loss, results.acc_taw[current_task_number, task], results.acc_tag[current_task_number, task], predicted, true = approach.eval(task, tst_loader[task])
-        all_predicted += predicted
-        all_true += true
-        if task < current_task_number:
-            results.forg_taw[current_task_number, task] = results.acc_taw[:current_task_number, task].max(0) - \
-                                                          results.acc_taw[current_task_number, task]
-            results.forg_tag[current_task_number, task] = results.acc_tag[:current_task_number, task].max(0) - \
-                                                          results.acc_tag[current_task_number, task]
-        logger.print_task_results(results.acc_taw, results.acc_tag, current_task_number, task, test_loss,
-                                          results.forg_taw, results.forg_tag)
-    return all_predicted, all_true
+
 
 
 def seed_everything(seed=0):

@@ -3,7 +3,6 @@ from last_layer_analysis import last_layer_analysis
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import itertools
-from utils import get_test_metrics
 from settings import LAST_LAYER_ANALYSIS
 
 
@@ -104,11 +103,28 @@ class Logger:
                 print()
         print('*' * 108)
 
-    @staticmethod
-    def save_results(results, current_task_number, tst_loader, approach, logger, net):
-        all_predicted, all_true = get_test_metrics(results, current_task_number, tst_loader, approach)
+    def save_results(self, results, current_task_number, tst_loader, approach, logger, net):
+        all_predicted, all_true = self.get_test_metrics(results, current_task_number, tst_loader, approach, logger)
         logger.save_conf_matrix(all_predicted, all_true, current_task_number)
         logger.save_results(results.acc_taw, results.acc_tag, results.forg_taw, results.forg_tag, net, current_task_number,
                             results.taskcla, results.max_task)
         if LAST_LAYER_ANALYSIS:
             logger.print_last_layer_result(net, current_task_number, results.taskcla)
+
+    def get_test_metrics(self, results, current_task_number, tst_loader, approach):
+        all_predicted = []
+        all_true = []
+        for task in range(current_task_number + 1):
+            test_loss, results.acc_taw[current_task_number, task], results.acc_tag[
+                current_task_number, task], predicted, true = approach.eval(task, tst_loader[task])
+            all_predicted += predicted
+            all_true += true
+            if task < current_task_number:
+                results.forg_taw[current_task_number, task] = results.acc_taw[:current_task_number, task].max(0) - \
+                                                              results.acc_taw[current_task_number, task]
+                results.forg_tag[current_task_number, task] = results.acc_tag[:current_task_number, task].max(0) - \
+                                                              results.acc_tag[current_task_number, task]
+            self.logger.print_task_results(results.acc_taw, results.acc_tag, current_task_number, task, test_loss,
+                                      results.forg_taw, results.forg_tag)
+
+        return all_predicted, all_true
